@@ -1,0 +1,71 @@
+{
+  "_comment": "TASK04 — Dicionário de Sinônimos. Âncoras devem bater com termos reais nos títulos do catálogo.",
+
+  "groups": [
+    {
+      "_id": "celular",
+      "anchor": "iphone samsung galaxy pixel motorola xiaomi",
+      "aliases": ["celular", "smartphone", "telefone", "movel", "aparelho"]
+    },
+    {
+      "_id": "televisao",
+      "anchor": "tv",
+      "aliases": ["televisao", "televisor", "smart tv", "smarttv", "telao", "television"]
+    },
+    {
+      "_id": "notebook",
+      "anchor": "laptop macbook surface",
+      "aliases": ["notebook", "computador portatil", "portatil", "ultrabook", "netbook"]
+    },
+    {
+      "_id": "fone_ouvido",
+      "anchor": "airpods headphones earbuds buds",
+      "aliases": ["fone", "fone ouvido", "headphone", "headset", "auricular", "earphone"]
+    },
+    {
+      "_id": "cadeira",
+      "anchor": "chair",
+      "aliases": ["cadeira", "cadeira escritorio", "cadeira ergonomica", "cadeira gamer", "poltrona"]
+    },
+    {
+      "_id": "tablet_alias",
+      "anchor": "ipad tablet",
+      "aliases": ["tablete"]
+    },
+    {
+      "_id": "relogio",
+      "anchor": "watch",
+      "aliases": ["relogio inteligente", "relogio smart", "smartwatch", "wearable"]
+    },
+    {
+      "_id": "caixa_som",
+      "anchor": "speaker",
+      "aliases": ["caixa som", "caixa de som", "alto falante", "caixinha", "bluetooth speaker"]
+    },
+    {
+      "_id": "aspirador",
+      "anchor": "vacuum dyson",
+      "aliases": ["aspirador", "aspirador po", "aspirador de po", "robo aspirador"]
+    },
+    {
+      "_id": "cafeteira",
+      "anchor": "nespresso espresso",
+      "aliases": ["cafeteira", "maquina cafe", "maquina de cafe", "cafe expresso"]
+    },
+    {
+      "_id": "console",
+      "anchor": "playstation xbox nintendo switch",
+      "aliases": ["videogame", "video game", "console", "game console"]
+    },
+    {
+      "_id": "teclado",
+      "anchor": "keyboard",
+      "aliases": ["teclado", "teclado mecanico", "teclado gamer"]
+    },
+    {
+      "_id": "mouse_alias",
+      "anchor": "mouse",
+      "aliases": ["rato", "mouse gamer", "mouse wireless"]
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "_comment": "TASK03 — Palavras que NÃO devem ser stemmizadas (marcas, siglas, invariáveis)",
+
+  "invariable": [
+    "adidas", "asus", "sonos", "series", "plus", "helios",
+    "pegasus", "markus", "oneplus", "celsius", "nexus",
+    "exodus", "status", "campus", "chorus", "bonus",
+    "atlas", "alias", "canvas", "versus", "virus",
+    "chassis", "chassis", "cosmos", "focus",
+    "tenis", "onibus", "lapis", "oasis", "cactus",
+    "bis", "gás", "deus", "pais", "mais", "mas", "nos",
+    "tv", "led", "lcd", "usb", "hdmi", "wifi", "ssd", "hdd",
+    "oled", "qled", "amoled", "nfc", "gps", "4k", "8k",
+    "ios", "macos", "windows"
+  ]
+}
