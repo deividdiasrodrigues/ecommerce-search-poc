@@ -4,32 +4,32 @@ const { toProduct } = require("../models/product");
 const DEFAULT_LIMIT = 40;
 
 /**
- * Busca produtos com ranking de relevância (TASK05).
+ * Retorna o par de condição SQL + params para um token.
  *
- * Recebe { specific, expanded } do pipeline:
- *
- *   specific : tokens que o usuário escreveu diretamente (samsung, iphone, 15, wireless)
- *   expanded : tokens gerados por expansão de sinônimos (iphone, galaxy, pixel...)
- *              — usados APENAS quando specific está vazio
- *
- * Lógica de filtragem:
- *
- *   COM specific  → filtra só por specific (OR entre eles)
- *     "smartphone samsung" → WHERE title LIKE '%samsung%'
- *     "smartphone iphone"  → WHERE title LIKE '%iphone%'
- *     "iphone 15"          → WHERE title LIKE '%iphone%' OR title LIKE '%15%'
- *
- *   SEM specific  → filtra por expanded (OR entre eles)
- *     "smartphone"         → WHERE title LIKE '%iphone%' OR ... OR title LIKE '%xiaomi%'
- *     "celular"            → idem
- *
- * Isso garante que a marca especificada pelo usuário seja sempre respeitada,
- * independente de qual alias de categoria foi usado.
+ * Tokens longos (> 3 chars): LIKE '%token%'  — busca por substring
+ * Tokens curtos (≤ 3 chars): LIKE '% token %' com espaço padding na coluna
+ *   → CONCAT(' ', p.title, ' ') LIKE '% mx %'
+ *   Evita falsos positivos como "ZoomX" ao buscar "mx".
  */
+function tokenCondition(token) {
+  if (token.length <= 3) {
+    // Word-boundary simulado via CONCAT + espaço
+    const pattern = `% ${token} %`;
+    return {
+      cond:   "(CONCAT(' ', p.title, ' ') LIKE ? OR CONCAT(' ', p.description, ' ') LIKE ?)",
+      params: [pattern, pattern],
+    };
+  }
+  const pattern = `%${token}%`;
+  return {
+    cond:   "(p.title LIKE ? OR p.description LIKE ?)",
+    params: [pattern, pattern],
+  };
+}
+
 async function searchByTerm(termObj, { limit = DEFAULT_LIMIT } = {}) {
   const safeLimit = Math.max(1, Math.min(200, parseInt(limit, 10) || DEFAULT_LIMIT));
 
-  // Suporte a chamada legada com string simples
   let specific, expanded;
   if (typeof termObj === "string") {
     specific = [];
@@ -39,18 +39,13 @@ async function searchByTerm(termObj, { limit = DEFAULT_LIMIT } = {}) {
     expanded = termObj.expanded || [];
   }
 
-  // Tokens efetivos: specific tem prioridade; expanded só entra se specific vazio
   const activeTokens = specific.length > 0 ? specific : expanded;
   if (activeTokens.length === 0) return [];
 
-  // Constrói OR entre todos os tokens ativos
-  const conditions = activeTokens
-    .map(() => "(p.title LIKE ? OR p.description LIKE ?)")
-    .join(" OR ");
+  const parts  = activeTokens.map(tokenCondition);
+  const conditions = parts.map(p => p.cond).join(" OR ");
+  const params     = parts.flatMap(p => p.params);
 
-  const params = activeTokens.flatMap((t) => [`%${t}%`, `%${t}%`]);
-
-  // Score baseado no token mais relevante (primeiro specific ou primeiro expanded)
   const scoreToken   = activeTokens[0];
   const scorePattern = `%${scoreToken}%`;
 
